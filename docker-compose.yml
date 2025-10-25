@@ -1,0 +1,16 @@
+services:
+  db:
+    image: postgres:16-alpine
+    container_name: sport_overlays_postgres
+    restart: always
+    environment:
+      POSTGRES_DB: sport_overlays_db
+      POSTGRES_USER: sport_overlays_user
+      POSTGRES_PASSWORD: GrzesiekM14!
+    ports:
+      - '5432:5432'
+    volumes:
+      - pg_data:/var/lib/postgresql/data
+
+volumes:
+  pg_data:
