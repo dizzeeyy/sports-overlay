@@ -47,6 +47,6 @@ export class SeasonDto {
 
   @IsString()
   @IsNotEmpty()
-  @ApiProperty({ example: 'uuid-123', description: 'Identifier of the team' })
+  @ApiProperty({ example: 'LAL', description: 'Identifier of the team' })
   teamName: string;
 }

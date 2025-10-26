@@ -57,7 +57,7 @@ export class TeamsCreateDto {
   @IsNotEmpty()
   @IsString()
   @ApiProperty({
-    example: 'uuid-123',
+    example: 'uuid-1234-5678-9101-abcdef123456',
     description: 'Sport unique identifier the team belongs to',
   })
   sportId: string;
