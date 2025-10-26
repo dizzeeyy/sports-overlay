@@ -2,7 +2,10 @@ import { Body, Controller, Get, Param, Post } from '@nestjs/common';
 import { TeamsService } from './teams.service';
 import { Teams } from './teams.entity';
 import { TeamsCreateDto } from './teams-create.dto';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 
+@ApiTags('Teams')
+@ApiBearerAuth('Authorization in Swagger')
 @Controller('teams')
 export class TeamsController {
   constructor(private readonly teamsService: TeamsService) {}
