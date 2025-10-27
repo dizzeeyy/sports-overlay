@@ -1,10 +1,19 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { LoginDto } from './login.dto';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Licenses } from './licenses.entity';
+import { Repository } from 'typeorm';
 
 @Injectable()
 export class AuthService {
-  constructor(private readonly jwtService: JwtService) {}
+  constructor(
+    private readonly jwtService: JwtService,
+    @InjectRepository(Licenses)
+    private readonly licensesRepository: Repository<Licenses>,
+  ) {}
+
+  //do zmiany logika logowania na request z API.
 
   async login(loginDto: LoginDto): Promise<{ accessToken: string }> {
     const { username, password } = loginDto;
