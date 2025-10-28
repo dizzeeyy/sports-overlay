@@ -15,7 +15,14 @@ import { CreateSportDto } from './create-sport.dto';
 import { Sports } from './sports.entity';
 import { UpdateSportDto } from './update-sport.dto';
 import {
+  ApiAcceptedResponse,
+  ApiBadRequestResponse,
   ApiBearerAuth,
+  ApiCreatedResponse,
+  ApiNoContentResponse,
+  ApiNotFoundResponse,
+  ApiOAuth2,
+  ApiOkResponse,
   ApiOperation,
   ApiResponse,
   ApiTags,
@@ -33,13 +40,11 @@ export class SportsController {
     summary: 'Get all sports',
     description: 'Retrieve a list of all sports',
   })
-  @ApiResponse({
-    status: 200,
+  @ApiOkResponse({
     description: 'List of sports retrieved successfully',
     type: [SportsDto],
   })
-  @ApiResponse({
-    status: 404,
+  @ApiNotFoundResponse({
     description: 'No sports found',
   })
   async getAllSports(): Promise<Sports[]> {
@@ -51,13 +56,11 @@ export class SportsController {
     summary: 'Get sport by ID',
     description: 'Retrieve a sport details by its unique ID',
   })
-  @ApiResponse({
-    status: 200,
+  @ApiOkResponse({
     description: 'Sport retrieved successfully',
     type: SportsDto,
   })
-  @ApiResponse({
-    status: 404,
+  @ApiBadRequestResponse({
     description: 'Sport not found',
   })
   async getSportById(
@@ -71,13 +74,11 @@ export class SportsController {
     summary: 'Get sport by name',
     description: 'Retrieve a sport details by its name',
   })
-  @ApiResponse({
-    status: 200,
+  @ApiOkResponse({
     description: 'Sport retrieved successfully',
     type: SportsDto,
   })
-  @ApiResponse({
-    status: 404,
+  @ApiNotFoundResponse({
     description: 'Sport not found',
   })
   async getSportByName(@Param('name') name: string): Promise<Sports | null> {
@@ -89,13 +90,11 @@ export class SportsController {
     summary: 'Create a new sport',
     description: 'Create a new sport with the provided details',
   })
-  @ApiResponse({
-    status: 201,
+  @ApiCreatedResponse({
     description: 'Sport created successfully',
     type: SportsDto,
   })
-  @ApiResponse({
-    status: 400,
+  @ApiBadRequestResponse({
     description: 'Invalid input data',
   })
   async createSport(@Body() createSportDto: CreateSportDto): Promise<Sports> {
@@ -107,17 +106,14 @@ export class SportsController {
     summary: 'Update an existing sport',
     description: 'Update the details of an existing sport',
   })
-  @ApiResponse({
-    status: 200,
+  @ApiOkResponse({
     description: 'Sport updated successfully',
     type: SportsDto,
   })
-  @ApiResponse({
-    status: 400,
+  @ApiBadRequestResponse({
     description: 'Invalid input data',
   })
-  @ApiResponse({
-    status: 404,
+  @ApiNotFoundResponse({
     description: 'Sport not found',
   })
   async updateSportByName(
@@ -131,8 +127,7 @@ export class SportsController {
     summary: 'Delete a sport',
     description: 'Delete a sport by its unique ID',
   })
-  @ApiResponse({
-    status: 200,
+  @ApiNoContentResponse({
     description: 'Sport deleted successfully',
   })
   deleteSport(@Param('id') id: string): Promise<void> {

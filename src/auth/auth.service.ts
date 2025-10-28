@@ -9,6 +9,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Licenses } from './licenses.entity';
 import { Repository } from 'typeorm';
 import { LicensesDto } from './licenses.dto';
+import { LicensesResponseDto, LicensesStatus } from './licenses-response.dto';
 
 @Injectable()
 export class AuthService {
@@ -47,6 +48,14 @@ export class AuthService {
     const token = this.jwtService.sign(payload);
     return {
       accessToken: token,
+    };
+  }
+
+  async addLicense(licensesDto: LicensesDto): Promise<LicensesResponseDto> {
+    const newLicense = await this.licensesRepository.save(licensesDto);
+    return {
+      status: LicensesStatus.OK,
+      sign: newLicense.sign,
     };
   }
 }
