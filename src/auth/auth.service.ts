@@ -1,4 +1,5 @@
 import {
+  ConflictException,
   Injectable,
   NotFoundException,
   UnauthorizedException,
@@ -31,6 +32,11 @@ export class AuthService {
     return dbCredentials;
   }
 
+  async checkLicense(api_key: string): Promise<LicensesDto | null> {
+    const dbLicense = this.licensesRepository.findOneBy({ api_key });
+    return dbLicense;
+  }
+
   async login(loginDto: LoginDto): Promise<{ accessToken: string }> {
     const { username, password } = loginDto;
     const loggedUser = await this.checkCredentials(loginDto);
@@ -52,6 +58,14 @@ export class AuthService {
   }
 
   async addLicense(licensesDto: LicensesDto): Promise<LicensesResponseDto> {
+    const existingLicense = await this.checkLicense(licensesDto.api_key);
+
+    if (existingLicense) {
+      throw new ConflictException({
+        status: LicensesStatus.ERROR,
+        sign: existingLicense.sign,
+      });
+    }
     const newLicense = await this.licensesRepository.save(licensesDto);
     return {
       status: LicensesStatus.OK,

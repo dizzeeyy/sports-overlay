@@ -10,13 +10,14 @@ import { LoginDto } from './login.dto';
 import { AuthService } from './auth.service';
 import {
   ApiBadRequestResponse,
+  ApiConflictResponse,
   ApiCreatedResponse,
   ApiOperation,
   ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
 import { LicensesDto } from './licenses.dto';
-import { LicensesResponseDto } from './licenses-response.dto';
+import { LicensesResponseDto, LicensesStatus } from './licenses-response.dto';
 
 @ApiTags('Authorization')
 @Controller('auth')
@@ -32,6 +33,13 @@ export class AuthController {
   @ApiCreatedResponse({
     description: 'License added successfully.',
     type: LicensesResponseDto,
+  })
+  @ApiConflictResponse({
+    description: 'License with given api_key already exists.',
+    example: {
+      status: LicensesStatus.ERROR,
+      sign: 'signature_example',
+    },
   })
   @ApiBadRequestResponse({ description: 'Invalid payload.' })
   async addLicense(

@@ -14,6 +14,6 @@ export class LicensesResponseDto {
 
   @IsNotEmpty()
   @IsString()
-  @ApiProperty({ example: '1587358' })
+  @ApiProperty({ example: 'signature_example' })
   sign: string;
 }
