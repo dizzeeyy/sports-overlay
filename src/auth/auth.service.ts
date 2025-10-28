@@ -1,9 +1,14 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import {
+  Injectable,
+  NotFoundException,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { LoginDto } from './login.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Licenses } from './licenses.entity';
 import { Repository } from 'typeorm';
+import { LicensesDto } from './licenses.dto';
 
 @Injectable()
 export class AuthService {
@@ -15,11 +20,26 @@ export class AuthService {
 
   //do zmiany logika logowania na request z API.
 
+  async checkCredentials(credentials: LoginDto): Promise<LicensesDto | null> {
+    const dbCredentials = this.licensesRepository.findOneBy({
+      client_id: credentials.username,
+    });
+    if (!dbCredentials) {
+      throw new NotFoundException('User not found');
+    }
+    return dbCredentials;
+  }
+
   async login(loginDto: LoginDto): Promise<{ accessToken: string }> {
     const { username, password } = loginDto;
+    const loggedUser = await this.checkCredentials(loginDto);
 
     // Prosta weryfikacja (tymczasowa, bez faktycznej bazy)
-    if (username !== 'admin' || password !== 'password') {
+    if (
+      !loggedUser ||
+      username !== loggedUser.client_id ||
+      password !== loggedUser.sign
+    ) {
       throw new UnauthorizedException('Invalid credentials');
     }
 

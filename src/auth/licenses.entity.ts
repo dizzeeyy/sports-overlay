@@ -29,7 +29,7 @@ export class Licenses {
   client_id: number;
 
   @Column()
-  applicationId: number;
+  application_id: number;
 
   @Column({
     type: 'enum',

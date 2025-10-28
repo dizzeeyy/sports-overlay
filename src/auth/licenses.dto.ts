@@ -1,5 +1,12 @@
-import { IsEnum, IsNotEmpty, IsNumber, IsString, IsUrl } from 'class-validator';
-import { AuthType, Licenses } from './licenses.entity';
+import {
+  IsEnum,
+  IsNotEmpty,
+  IsNumber,
+  IsOptional,
+  IsString,
+  IsUrl,
+} from 'class-validator';
+import { AuthType, Licenses, Status } from './licenses.entity';
 
 export class LicensesDto {
   @IsNotEmpty()
@@ -8,7 +15,7 @@ export class LicensesDto {
 
   @IsNotEmpty()
   @IsNumber()
-  application_id: string;
+  application_id: number;
 
   @IsNotEmpty()
   @IsNumber()
@@ -30,4 +37,8 @@ export class LicensesDto {
   @IsNotEmpty()
   @IsString()
   sign: string;
+
+  @IsString()
+  @IsOptional()
+  status: Status;
 }
