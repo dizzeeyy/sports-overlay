@@ -50,4 +50,9 @@ export class LicensesDto {
   @IsOptional()
   @ApiProperty({ example: Status, required: false })
   status: Status;
+
+  @IsString({ each: true })
+  @IsOptional()
+  @ApiProperty({ example: ['scope1', 'scope2'], required: false })
+  scope?: string[];
 }

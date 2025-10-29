@@ -43,6 +43,12 @@ export class AuthService {
     });
   }
 
+  private getScopeBasedOnApplicationId(application_id: number): string[] {
+    if (application_id === 9) return ['pim'];
+    if (application_id === 10) return ['oms'];
+    return ['default'];
+  }
+
   async checkCredentials(credentials: LoginDto): Promise<LicensesDto | null> {
     const dbCredentials = this.licensesRepository.findOneBy({
       client_id: credentials.username,
@@ -87,7 +93,12 @@ export class AuthService {
         sign: existingLicense.sign,
       });
     }
-    const newLicense = await this.licensesRepository.save(licensesDto);
+    const license = new LicensesDto();
+    Object.assign(license, licensesDto);
+    license.scope = this.getScopeBasedOnApplicationId(
+      licensesDto.application_id,
+    );
+    const newLicense = await this.licensesRepository.save(license);
     return {
       status: LicensesStatus.OK,
       sign: newLicense.sign,
