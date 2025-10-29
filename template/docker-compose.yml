@@ -1,0 +1,33 @@
+services:
+  app:
+    build:
+      context: ../../
+      dockerfile: deployments/CLIENT_NAME_PLACEHOLDER/Dockerfile
+    env_file:
+      - .env
+    ports:
+      - '${APP_PORT}:3000'
+    depends_on:
+      - db
+    volumes:
+      - ./volumes/app_data:/usr/src/app/data
+    networks:
+      - appnet
+
+  db:
+    image: postgres:16-alpine
+    env_file:
+      - .env
+    environment:
+      POSTGRES_DB: ${DB_NAME}
+      POSTGRES_USER: sport_overlays_user
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    volumes:
+      - VOLUME_NAME_PLACEHOLDER:/var/lib/postgresql/data
+    networks:
+      - appnet
+networks:
+  appnet:
+    driver: bridge
+volumes:
+  VOLUME_NAME_PLACEHOLDER:

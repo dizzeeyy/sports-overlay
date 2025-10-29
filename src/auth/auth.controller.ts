@@ -49,6 +49,25 @@ export class AuthController {
   }
 
   @Public()
+  @Post('build')
+  @ApiOperation({
+    summary: 'Builds Docker files for the client',
+    description: 'Generates and deploys Docker files based on provided info.',
+  })
+  @ApiCreatedResponse({
+    description: 'Docker files built and deployed successfully.',
+    schema: {
+      example: { message: 'Instance for client_id deployed successfully.' },
+    },
+  })
+  @ApiBadRequestResponse({ description: 'Invalid payload.' })
+  async buildDockerFiles(
+    @Body() buildInfo: LicensesDto,
+  ): Promise<{ message: string }> {
+    return this.authService.buildDockerFiles(buildInfo);
+  }
+
+  @Public()
   @Post('login')
   @ApiOperation({
     summary: 'User login to obtain JWT token',
