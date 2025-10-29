@@ -27,7 +27,7 @@ export class AuthService {
 
   async buildDockerFiles(buildInfo: LicensesDto): Promise<{ message: string }> {
     return new Promise((resolve, reject) => {
-      const buildCommand = `./docker-deployment.sh ${buildInfo.api_url} ${buildInfo.client_id} ${this.configService.get<string>('JWT_SECRET')} 3001 ${this.configService.get<string>('DB_PORT')}`; //${this.configService.get<string>('APP_PORT')}
+      const buildCommand = `./docker-deployment.sh ${buildInfo.api_url} ${buildInfo.client_id} ${this.configService.get<string>('JWT_SECRET')} ${this.configService.get<string>('APP_PORT')} ${this.configService.get<string>('DB_PORT')}`; //APP_PORT to port na ktorym dziala aplikacja i jest mapowana na port 3000 w dockerze. APP_PORT musi byc unikalny dla kazdego klienta != 3000.
 
       exec(buildCommand, (error, stdout, stderr) => {
         if (error) {
