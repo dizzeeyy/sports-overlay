@@ -25,7 +25,7 @@ export class Player {
   @Column({ nullable: true })
   position: string;
 
-  @ManyToOne(() => Teams, (team) => team.player)
+  @ManyToOne(() => Teams, (team) => team.players)
   team: Teams;
 
   @OneToMany(() => MatchPlayer, (matchPlayer) => matchPlayer.player)

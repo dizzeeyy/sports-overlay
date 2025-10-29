@@ -19,12 +19,21 @@ export class TeamsService {
   async findOne(id: string): Promise<Teams> {
     const team = await this.teamsRepository.findOne({
       where: { id },
-      relations: ['sport', 'seasons'],
+      relations: ['players', 'seasons', 'sport'],
     });
     if (!team) {
       throw new NotFoundException('Team not found');
     }
     return team;
+  }
+
+  async createTeams(teamsCreateDto: TeamsCreateDto[]): Promise<Teams[]> {
+    const createdTeams: Teams[] = [];
+    for (const teamDto of teamsCreateDto) {
+      const team = await this.createTeam(teamDto);
+      createdTeams.push(team);
+    }
+    return createdTeams;
   }
 
   async createTeam(teamsCreateDto: TeamsCreateDto): Promise<Teams> {

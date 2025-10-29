@@ -2,7 +2,7 @@ import { Body, Controller, Get, Param, Post } from '@nestjs/common';
 import { TeamsService } from './teams.service';
 import { Teams } from './teams.entity';
 import { TeamsCreateDto } from './teams-create.dto';
-import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiCreatedResponse, ApiTags } from '@nestjs/swagger';
 
 @ApiTags('Teams')
 @ApiBearerAuth('Authorization in Swagger')
@@ -20,7 +20,10 @@ export class TeamsController {
   }
 
   @Post('add')
-  async createTeam(@Body() teamData: TeamsCreateDto): Promise<Teams> {
-    return this.teamsService.createTeam(teamData);
+  @ApiCreatedResponse({
+    type: [Teams],
+  })
+  async createTeam(@Body() teamData: TeamsCreateDto[]): Promise<Teams[]> {
+    return this.teamsService.createTeams(teamData);
   }
 }

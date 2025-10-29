@@ -42,5 +42,5 @@ export class Teams {
   awayMatches: Match[];
 
   @OneToMany(() => Player, (player) => player.team)
-  player: Player[];
+  players: Player[];
 }
