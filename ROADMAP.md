@@ -51,54 +51,79 @@ Dokumentacja zawiera opis i sposoby działania endpointów REST oraz sposobów a
 
 ---
 
-## Instrukcje pullowania i łączenia branchy (merge/rebase)
+## Instrukcje pracy z branchami — od utworzenia do połączenia w main
 
-Aby bezpiecznie aktualizować i łączyć zmiany z innych gałęzi, stosuj poniższe kroki:
+Poniżej kompletny sposób pracy z branchami od ich utworzenia, przez wprowadzanie zmian, aż do scalania (merge) z główną gałęzią `main`.
 
-1. **Synchronizacja lokalnego brancha z `main` (lub `dev`) przed pracą:**
+1. **Utworzenie nowego brancha**  
+   Najpierw przełącz się na główny branch `main` i pobierz najnowsze zmiany:
 
 ```bash
-git checkout feature/twoj-branch
+git checkout main
+git pull origin main
+```
+
+Następnie utwórz i przełącz się na nowy branch funkcjonalności (np. `feature/nazwa-funkcjonalnosci`):
+
+```bash
+git checkout -b feature/nazwa-funkcjonalnosci
+```
+
+2. **Wprowadzanie zmian**
+
+- Pracuj nad kodem w nowym branchu.
+- Dodawaj zmodyfikowane pliki do stage:
+
+```bash
+git add .
+```
+
+- Twórz commity z opisem zmian:
+
+```bash
+git commit -m "Opis wprowadzonych zmian"
+```
+
+3. **Aktualizacja brancha o zmiany z main**  
+   W trakcie pracy warto regularnie synchronizować branch z `main`, aby uniknąć konfliktów:
+
+```bash
 git fetch origin
 git rebase origin/main
 ```
 
-**lub zamiast rebase:**
+Jeśli pojawią się konflikty, rozwiąż je, następnie:
+
+```bash
+git add <naprawione_pliki>
+git rebase --continue
+```
+
+Alternatywnie można zamiast rebase wykonać merge:
 
 ```bash
 git merge origin/main
 ```
 
-2. **Rozwiązywanie ewentualnych konfliktów podczas rebase lub merge**
+4. **Wypchnięcie brancha na zdalne repozytorium**
 
-- Edytuj pliki z konfliktami
-- `git add <naprawione_pliki>`
-- `git rebase --continue` lub `git commit` (w przypadku merge)
-
-3. **Po zakończeniu pracy, wypchnij branch na zdalne repo:**
+Po zakończeniu zmian wypchnij branch:
 
 ```bash
-git push origin feature/twoj-branch
+git push origin feature/nazwa-funkcjonalnosci
 ```
 
-4. **Stwórz Pull Request (PR) na GitHubie do głównej gałęzi (`main` lub `dev`)**
+5. **Utworzenie Pull Request (PR)**  
+   Na platformie GitHub utwórz Pull Request z Twojego branchu `feature/nazwa-funkcjonalnosci` do `main`.  
+   Dodaj opis zmian i ewentualne wymagania do review.
 
-5. **Aktualizuj branch w PR o nowe zmiany z `main`, jeśli pojawiły się po otwarciu PR**
+6. **Aktualizacja brancha w PR o nowe zmiany z main**  
+   Jeżeli w trakcie przeglądu pojawiły się nowe commity w `main`, zsynchronizuj branch:
 
-- Użyj rebase:
+Rebase:
 
 ```bash
-git checkout feature/twoj-branch
 git fetch origin
+git checkout feature/nazwa-funkcjonalnosci
 git rebase origin/main
-git push --force-with-lease origin feature/twoj-branch
-```
-
-lub merge:
-
-```bash
-git checkout feature/twoj-branch
-git fetch origin
-git merge origin/main
-git push origin feature/twoj-branch
 ```
