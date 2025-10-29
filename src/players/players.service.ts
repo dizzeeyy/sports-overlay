@@ -28,10 +28,16 @@ export class PlayersService {
     return player;
   }
 
-  async findByName(name: string): Promise<Player | null> {
-    const player = await this.playerRepository.findOne({
-      where: { lastName: name },
-    });
+  async findByName(
+    firstName?: string,
+    lastName?: string,
+  ): Promise<Player[] | null> {
+    let player: Player[] | null = null;
+    if (lastName && firstName) {
+      player = await this.playerRepository.find({
+        where: { firstName: firstName, lastName: lastName },
+      });
+    }
     return player || null;
   }
 
@@ -40,7 +46,15 @@ export class PlayersService {
   ): Promise<CreatePlayersResponseDto[]> {
     const players: CreatePlayersResponseDto[] = [];
     for (const playerData of createPlayersDto) {
-      const player = await this.findByName(playerData.lastName);
+      //   const player = await this.findByName(
+      //     playerData.firstName,
+      //     playerData.lastName,
+      //   );
+      const player = await this.playerRepository
+        .createQueryBuilder('player')
+        .where('player.firstName = :name', { name: playerData.firstName })
+        .andWhere('player.lastName = :name', { name: playerData.lastName })
+        .getOne();
       if (!player) {
         const newPlayer = this.playerRepository.create(playerData);
         await this.playerRepository.save(newPlayer);

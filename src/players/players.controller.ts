@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post } from '@nestjs/common';
 import { PlayersService } from './players.service';
 import { Player } from './player.entity';
 import { createPlayersDto } from './create-players.dto';
@@ -11,6 +11,11 @@ export class PlayersController {
   @Get()
   async findAll(): Promise<Player[]> {
     return this.playersService.findAll();
+  }
+
+  @Get('lastName/:lastName')
+  async findByName(@Param('lastName') name: string): Promise<Player[] | null> {
+    return this.playersService.findByName(undefined, name);
   }
 
   @Post('/add')
