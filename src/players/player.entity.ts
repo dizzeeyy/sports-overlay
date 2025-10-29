@@ -1,10 +1,32 @@
 import { MatchPlayer } from 'src/matches/match-player.entity';
-import { Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { Teams } from 'src/teams/teams.entity';
+import {
+  Column,
+  Entity,
+  ManyToOne,
+  OneToMany,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 
 @Entity()
 export class Player {
   @PrimaryGeneratedColumn('uuid')
   id: string;
+
+  @Column({ nullable: false, length: 100 })
+  firstName: string;
+
+  @Column({ nullable: false, length: 100 })
+  lastName: string;
+
+  @Column({ nullable: true })
+  birthDate: Date;
+
+  @Column({ nullable: true })
+  position: string;
+
+  @ManyToOne(() => Teams, (team) => team.player)
+  team: Teams;
 
   @OneToMany(() => MatchPlayer, (matchPlayer) => matchPlayer.player)
   matchStats: MatchPlayer[];

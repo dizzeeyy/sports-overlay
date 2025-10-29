@@ -9,6 +9,7 @@ import {
 } from 'typeorm';
 import { Seasons } from './season.entity';
 import { Match } from 'src/matches/match.entity';
+import { Player } from 'src/players/player.entity';
 
 @Entity()
 export class Teams {
@@ -39,4 +40,7 @@ export class Teams {
 
   @OneToMany(() => Match, (match) => match.awayTeam)
   awayMatches: Match[];
+
+  @OneToMany(() => Player, (player) => player.team)
+  player: Player[];
 }
