@@ -20,14 +20,16 @@ export class Player {
   lastName: string;
 
   @Column({ nullable: true })
-  birthDate: Date;
+  birthDate: string;
 
   @Column({ nullable: true })
   position: string;
 
-  @ManyToOne(() => Teams, (team) => team.players)
+  @ManyToOne(() => Teams, (team) => team.players, { nullable: true })
   team: Teams;
 
-  @OneToMany(() => MatchPlayer, (matchPlayer) => matchPlayer.player)
+  @OneToMany(() => MatchPlayer, (matchPlayer) => matchPlayer.player, {
+    nullable: true,
+  })
   matchStats: MatchPlayer[];
 }

@@ -7,6 +7,7 @@ import { TypeOrmModuleConfig } from './config/database.config';
 import { SportsModule } from './sports/sports.module';
 import { TeamsModule } from './teams/teams.module';
 import { AuthModule } from './auth/auth.module';
+import { PlayersModule } from './players/players.module';
 
 @Module({
   imports: [
@@ -17,6 +18,7 @@ import { AuthModule } from './auth/auth.module';
     SportsModule,
     TeamsModule,
     AuthModule,
+    PlayersModule,
   ],
   controllers: [AppController],
   providers: [AppService],
