@@ -8,6 +8,7 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { Seasons } from './season.entity';
+import { Match } from 'src/matches/match.entity';
 
 @Entity()
 export class Teams {
@@ -32,4 +33,10 @@ export class Teams {
   @ManyToOne(() => Sports, (sport) => sport.teams, { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'sportId' })
   sport: Sports;
+
+  @OneToMany(() => Match, (match) => match.homeTeam)
+  homeMatches: Match[];
+
+  @OneToMany(() => Match, (match) => match.awayTeam)
+  awayMatches: Match[];
 }
