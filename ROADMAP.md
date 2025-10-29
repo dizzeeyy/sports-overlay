@@ -25,7 +25,24 @@ Dokument służy do zarządzania pomysłami na rozbudowę oraz monitorowania sta
 
 ## Aktualne branche i plany rozbudowy
 
-### BRAK
+### - TODO ⚪:
+
+#### SCOPE DLA KLUCZY API
+
+Dodanie np. w `/auth/licenses.entity.ts` dodatkowej kolumny np.
+
+```ts
+@Column('simple-array')
+@IsArray()
+@ArrayNotEmpty()
+@IsString({each: true})
+scope: string[];
+```
+
+Następnie te dane będą odczytywane przez np. `Guard` w dekoratorach i walidowane będą endpointy.
+
+Uzasadnienie jest takie, ze ten projekt ma byc globalny, a zakres podany w scope pozwoli na odizolowanie wywołań API na nieuprawnionych endpointach.
+Baza danych, która przechowuje informacje z `/auth/licenses.entity.ts` jest zabezpieczona na innym serwerze.
 
 ---
 
