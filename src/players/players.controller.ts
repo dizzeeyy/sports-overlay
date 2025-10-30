@@ -10,12 +10,17 @@ export class PlayersController {
 
   @Get()
   async findAll(): Promise<Player[]> {
-    return this.playersService.findAll();
+    return await this.playersService.findAll();
+  }
+
+  @Get(':id')
+  async findOne(@Param('id') id: string): Promise<Player> {
+    return await this.playersService.findOne(id);
   }
 
   @Get('lastName/:lastName')
-  async findByName(@Param('lastName') name: string): Promise<Player[] | null> {
-    return this.playersService.findByName(undefined, name);
+  async findByName(@Param('lastName') name: string): Promise<Player[]> {
+    return this.playersService.findByLastName(name);
   }
 
   @Post('/add')

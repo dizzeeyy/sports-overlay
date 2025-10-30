@@ -1,10 +1,16 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  ConflictException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Player } from './player.entity';
 import { Repository } from 'typeorm';
 import { createPlayersDto } from './create-players.dto';
 import { CreatePlayersResponseDto } from './create-players-response.dto';
 import { plainToInstance } from 'class-transformer';
+import { UpdatePlayersDto } from './update-players.dto';
+import { UpdatePlayersResponseDto } from './uopdate-players-response.dto';
 
 @Injectable()
 export class PlayersService {
@@ -41,6 +47,19 @@ export class PlayersService {
     return player || null;
   }
 
+  async findByLastName(lastName: string): Promise<Player[]> {
+    const player = await this.playerRepository.find({
+      where: { lastName },
+      relations: ['team'],
+    });
+
+    if (!player) {
+      throw new NotFoundException('Player not found');
+    }
+
+    return player;
+  }
+
   async createPlayers(
     createPlayersDto: createPlayersDto[],
   ): Promise<CreatePlayersResponseDto[]> {
@@ -69,5 +88,37 @@ export class PlayersService {
       }
     }
     return players;
+  }
+
+  async updatePlayers(
+    updatePlayersDto: UpdatePlayersDto[],
+  ): Promise<UpdatePlayersResponseDto[]> {
+    const results: UpdatePlayersResponseDto[] = [];
+
+    for (const updatePlayer of updatePlayersDto) {
+      const existingPlayer = await this.findOne(updatePlayer.id);
+      if (existingPlayer) {
+        // Aktualizuj tylko te pola, które są dozwolone
+        const { id, ...updateData } = updatePlayer;
+
+        // Ręczna aktualizacja pól
+        Object.assign(existingPlayer, updateData);
+
+        await this.playerRepository.save(existingPlayer);
+
+        results.push({
+          ...updatePlayer,
+          updated: true,
+          message: 'successfully updated',
+        });
+      } else {
+        results.push({
+          ...updatePlayer,
+          updated: false,
+          message: 'failed to update, player not found - first add player',
+        });
+      }
+    }
+    return results;
   }
 }
