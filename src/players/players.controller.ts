@@ -1,8 +1,9 @@
-import { Body, Controller, Get, Param, Post } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, Put } from '@nestjs/common';
 import { PlayersService } from './players.service';
 import { Player } from './player.entity';
 import { createPlayersDto } from './create-players.dto';
 import { CreatePlayersResponseDto } from './create-players-response.dto';
+import { UpdatePlayersDto } from './update-players.dto';
 
 @Controller('players')
 export class PlayersController {
@@ -28,5 +29,12 @@ export class PlayersController {
     @Body() createPlayersDto: createPlayersDto[],
   ): Promise<CreatePlayersResponseDto[]> {
     return await this.playersService.createPlayers(createPlayersDto);
+  }
+
+  @Put('update')
+  async updatePlayers(
+    @Body() updatePlayersDto: UpdatePlayersDto[],
+  ): Promise<UpdatePlayersDto[]> {
+    return await this.playersService.updatePlayers(updatePlayersDto);
   }
 }
